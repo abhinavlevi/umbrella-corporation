@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #0b0d10;
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Canonical visually-hidden utility (preserves accessibility tree) */
+.visually-hidden {
+  position: absolute;
+  clip-path: inset(50%);
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+}
+
+/* Form control sizing & coarse pointer adaptation */
+.hive-input {
+  font-size: 1rem;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+@media (pointer: coarse) {
+  .hive-input {
+    min-height: 52px;
+  }
+}
+
+.hive-select {
+  appearance: none;
+  font-size: 1rem;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+@media (pointer: coarse) {
+  .hive-select {
+    min-height: 52px;
+  }
+}
+
+/* Laboratory carbon & sterile grid atmosphere */
+.bg-hive-grid {
+  background-color: #0b0d10;
+  background-image: 
+    linear-gradient(to right, rgba(220, 38, 38, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(220, 38, 38, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(220, 38, 38, 0.10), transparent 60%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+}
+
+/* Custom typography classes for prop-accurate badges */
+.font-umbrella-header {
+  font-family: 'Orbitron', 'Inter', sans-serif;
+}
+
+.font-typewriter {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+}
+
+.font-tech-mono {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.font-wesker-condensed {
+  font-family: 'Teko', 'Share Tech Mono', sans-serif;
+}
+
+/* Scanner & Authorization Glitch Animation */
+@keyframes scanlineSweep {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+.animate-scanline {
+  animation: scanlineSweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes authPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  20% {
+    transform: scale(1.012) translateX(-2px);
+    filter: brightness(1.18) contrast(1.08);
+  }
+  40% {
+    transform: scale(0.996) translateX(2px);
+    filter: brightness(0.95);
+  }
+  60% {
+    transform: scale(1.004);
+    filter: brightness(1.08);
+  }
+}
+
+.animate-auth-glitch {
+  animation: authPulse 0.55s ease-out;
+}
