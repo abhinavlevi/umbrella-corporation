@@ -6,12 +6,9 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  HelpCircle,
-  Image as ImageIcon,
   Loader2,
   RotateCcw,
   Share2,
-  Shield,
   SlidersHorizontal,
   Volume2,
   VolumeX,
@@ -29,7 +26,7 @@ import {
 import { BadgePreview } from './components/BadgePreview';
 import { UmbrellaOctagonLogo } from './components/UmbrellaGraphics';
 import { hiveAudio } from './utils/soundFx';
-import { getBadgeOpenGraphImage, syncBadgeSeo } from './utils/seoManager';
+import { syncBadgeSeo } from './utils/seoManager';
 import { hostImageForSharing } from './utils/imageHost';
 
 function safeEncodePayload(obj: unknown): string {
@@ -110,7 +107,6 @@ export function App() {
   const [showBiometrics, setShowBiometrics] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [showFramingControls, setShowFramingControls] = useState<boolean>(false);
-  const [showSocialCard, setShowSocialCard] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
@@ -934,95 +930,6 @@ export function App() {
             </div>
           </div>
         </div>
-
-        {/* Semantic Corporate Reference & AEO/GEO Knowledge Base */}
-        <section aria-labelledby="corporate-reference-heading" className="mt-14 border-t border-zinc-800/80 pt-10 pb-4">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/50 border border-red-800/60 text-xs font-semibold text-red-300 tracking-wider uppercase">
-                <Shield className="w-3.5 h-3.5 text-red-400" />
-                <span>Facility Credential Specifications</span>
-              </div>
-              <h2 id="corporate-reference-heading" className="text-xl sm:text-2xl font-bold text-white tracking-wide">
-                Umbrella Corporation Credential Architecture
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                Standard technical operating parameters, physical CR80 dimensions, and clearance tier protocols for the Raccoon City underground research complex.
-              </p>
-            </div>
-
-            {/* 3 Supported Specifications Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
-                  Format A: Personnel Pass
-                </div>
-                <div className="text-xs text-zinc-300 font-medium">Standard Vertical ID Card</div>
-                <p className="text-[11px] text-zinc-400 leading-relaxed">
-                  Vertical white laminate with 8-segment Umbrella octagon, red-bordered portrait frame, full-width charcoal name band, physical typewriter specs, and high-density checkpoint QR.
-                </p>
-              </div>
-
-              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
-                  Format B: Facility Keycard
-                </div>
-                <div className="text-xs text-zinc-300 font-medium">Departmental Bulkhead Pass</div>
-                <p className="text-[11px] text-zinc-400 leading-relaxed">
-                  Non-portrait vertical keycard centered around the crimson Umbrella octagon with wide division banner (Security, U.B.C.S., Lab Staff, Executive) and optical access code.
-                </p>
-              </div>
-
-              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
-                  Format C: Classified Black
-                </div>
-                <div className="text-xs text-zinc-300 font-medium">Directorate High-Security Pass</div>
-                <p className="text-[11px] text-zinc-400 leading-relaxed">
-                  Horizontal CR80 matte card with 3D watermark, metallic crest, red-bordered Security Level block, personal dossier, biometric fingerprint, gold EMV chip, and Code-128 barcode.
-                </p>
-              </div>
-            </div>
-
-            {/* Accordion FAQ using native HTML <details> and <summary> per modern guidance */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-3">
-                <HelpCircle className="w-4 h-4 text-red-500" />
-                <span>Frequently Answered Operational Queries (AEO/GEO Index)</span>
-              </div>
-
-              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
-                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
-                  <span>How are physical cards scaled for 300 DPI PVC badge printing?</span>
-                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
-                </summary>
-                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
-                  The Hive ID Generator exports DOM elements at a 3x retina pixel ratio directly through html-to-image. Vertical passes output at 1020×1614 px and horizontal passes output at 1620×1020 px, aligning with CR80 standard dimensions (85.60 × 53.98 mm) at 300 DPI print fidelity.
-                </p>
-              </details>
-
-              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
-                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
-                  <span>What security clearance designations are authorized within The Hive?</span>
-                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
-                </summary>
-                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
-                  The facility operates on a 6-tier authorization structure: Level 1 (Surface Reception &amp; Transit), Level 2 (Logistics Sub-Level), Level 3 (Bio-Containment Diagnostics), Level 4 (Restricted Sector B Viral Labs), Level 5 (Deep Hive &amp; Red Queen Chamber), and Clearance A (Directorate Command with unrestricted facility access).
-                </p>
-              </details>
-
-              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
-                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
-                  <span>How do shareable permalinks and OpenGraph preview cards function?</span>
-                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
-                </summary>
-                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
-                  Clicking "Share &amp; Social Link" generates an in-memory encoded URL parameter and dynamically synchronizes OpenGraph &amp; Twitter Card meta tags. When posted to Twitter/X, LinkedIn, Discord, or Slack, the link automatically renders an operative-specific 1200×630 preview card.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* Corporate Minimal Footer */}
