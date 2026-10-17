@@ -62,9 +62,9 @@ export async function hostImageForSharing(imageSource: string): Promise<string> 
     return imageSource;
   }
 
-  // 2. Default SVG presets are vector URIs that don't need cloud hosting
+  // 2. Default SVG presets are vector URIs that do not need hosting or URL bloat
   if (imageSource.startsWith('data:image/svg+xml')) {
-    return imageSource;
+    return '';
   }
 
   try {
@@ -95,13 +95,9 @@ export async function hostImageForSharing(imageSource: string): Promise<string> 
       }
     }
   } catch {
-    // Offline or network error - fall back to compact local representation
+    // Network or upload error
   }
 
-  // Fallback: return optimized data url if cloud host was unreachable
-  try {
-    return await optimizeImageForCloud(imageSource);
-  } catch {
-    return imageSource;
-  }
+  // Never return bulky data URIs to keep share URLs lightweight
+  return '';
 }

@@ -273,13 +273,22 @@ export function App() {
     showTemporaryStatus('Securing Operative Record & Preparing Public Link...');
 
     try {
-      // If operative has a photo and style is not facility pass, upload an optimized copy for remote viewing
+      // Only host if user uploaded a custom image (not a default preset SVG)
       let publicPhotoUrl: string | undefined = undefined;
-      if (badgeData.style !== 'facility' && badgeData.photoUrl) {
-        publicPhotoUrl = await hostImageForSharing(badgeData.photoUrl);
+      const isCustomPhoto =
+        badgeData.style !== 'facility' &&
+        badgeData.photoUrl &&
+        !badgeData.photoUrl.startsWith('data:image/svg+xml') &&
+        badgeData.photoUrl !== OPERATIVE_PORTRAITS[badgeData.presetId];
+
+      if (isCustomPhoto) {
+        const hosted = await hostImageForSharing(badgeData.photoUrl);
+        if (hosted && hosted.startsWith('http')) {
+          publicPhotoUrl = hosted;
+        }
       }
 
-      const sharePayload = {
+      const sharePayload: Record<string, string | number | undefined> = {
         style: badgeData.style,
         fullName: badgeData.fullName,
         division: badgeData.division,
@@ -297,8 +306,11 @@ export function App() {
         serialCode: badgeData.serialCode,
         qrContent: badgeData.qrContent,
         presetId: badgeData.presetId,
-        photoUrl: publicPhotoUrl,
       };
+
+      if (publicPhotoUrl) {
+        sharePayload.photoUrl = publicPhotoUrl;
+      }
 
       const encoded = safeEncodePayload(sharePayload);
       const shareUrl = `${window.location.origin}${window.location.pathname}?dossier=${encodeURIComponent(encoded)}`;
