@@ -1,0 +1,36 @@
+{
+  "name": "Umbrella Corporation — The Hive ID Generator",
+  "short_name": "The Hive ID",
+  "description": "Official Umbrella Corporation Access Badge & Security Clearance Credential Creator. Customize, preview, and issue Personnel, Facility Keycard, and Classified Hive Black passes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "categories": ["utilities", "design", "entertainment"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

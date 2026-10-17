@@ -1,0 +1,23 @@
+# Umbrella Corporation — The Hive Access Badge System
+
+> Official Umbrella Corporation Security & Personnel Credential Registry for Raccoon City Underground Research Facility (The Hive). Create, customize, preview, and issue verified Personnel Badges, Departmental Facility Keycards, and Classified Directorate Security Passes.
+
+## Core Capabilities
+- **Style A — Personnel Identification Badge**: Vertical white credential featuring the classic 8-segment Umbrella octagon emblem, red-bordered operative portrait, charcoal name band, Security Clearance Level 1–5/A, biometric physical specifications (Division, Height, Weight, Eyes, Hair), and scannable optical verification code.
+- **Style B — Facility Zone Keycard**: Minimalist vertical departmental access keycard with large centered Umbrella octagon, division bar (Security, U.B.C.S., Special Security, Lab Staff, Facility Ops, Executive), clearance tier, and optical checkpoint code.
+- **Style C — Classified Directorate Pass (Hive Black Edition)**: Horizontal CR80 dark security pass featuring the 3D Umbrella watermark, metallic crest, portrait & red-boxed Security Level Clearance badge, personal dossier record (Year of Birth, Sex, Blood Group, Authorized Sectors, Primary & Secondary Posts, Registry Serial), dermal ridge fingerprint scan, gold EMV smart chip, edge-to-edge barcode strip, and corporate motto *"OUR BUSINESS IS LIFE ITSELF"*.
+
+## Verified Personnel Dossiers
+- **Alice Abernathy**: Security Personnel • Clearance Level 5 (`/?preset=alice`)
+- **Carlos Olivera**: U.B.C.S. (Umbrella Biohazard Countermeasure Service) • Clearance Level 5 (`/?preset=carlos`)
+- **Albert Wesker**: Executive Management / Chief Researcher • Clearance A (`/?preset=wesker`)
+- **HUNK (Alpha Team)**: U.S.S. (Umbrella Security Service) • Clearance Level 5 (`/?preset=hunk`)
+- **Dr. William Birkin**: Virology & Research Division • Clearance A (`/?preset=birkin`)
+
+## OpenGraph & Social Previews
+- Main Registry Preview: `/og/og-default.png`
+- Alice Abernathy Record: `/og/og-alice.png`
+- Carlos Olivera Record: `/og/og-carlos.png`
+- Albert Wesker Record: `/og/og-wesker.png`
+- HUNK Alpha Team Record: `/og/og-hunk.png`
+- Dr. William Birkin Record: `/og/og-birkin.png`

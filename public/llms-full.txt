@@ -1,0 +1,39 @@
+# Umbrella Corporation — The Hive Access Badge System (Complete Reference)
+
+## Overview
+The Hive Access Badge System is the official Umbrella Corporation credential creation and verification studio. It enables operatives, researchers, and security personnel to configure, inspect, share, and download print-ready Umbrella Corporation identification passes modeled strictly on verified facility prop specifications.
+
+## Supported Credential Formats
+1. **Personnel Identification Pass (Vertical White Card)**
+   - **Header**: Extended bold "UMBRELLA CORPORATION" lockup.
+   - **Emblem & Portrait**: Left 8-segment crimson/white Umbrella octagon alongside a red-framed operative portrait with adjustable zoom and horizontal/vertical alignment.
+   - **Identity Band**: Full-width charcoal slate band displaying the operative's full name above a red monospaced `CLEARANCE LEVEL` indicator.
+   - **Biometric & Optical Grid**: Left typewriter column (`Division`, `HEIGHT`, `WEIGHT`, `EYES`, `HAIR`) paired with a scannable high-density optical verification code.
+   - **Footer**: *"This Identification is Property of the Umbrella Corporation"*.
+
+2. **Facility Zone Keycard (Vertical Minimal Card)**
+   - **Purpose**: Non-portrait departmental bulkhead and elevator keycard.
+   - **Layout**: Top Umbrella Corporation header, large centered 8-segment Umbrella octagon, charcoal division bar (`Security`, `U.B.C.S.`, `Special Security`, `Lab Staff`, `Facility Ops`, `Executive`), red clearance sub-bar, and centered optical verification code.
+
+3. **Classified Directorate Security Pass (Horizontal Black Card)**
+   - **Orientation**: Landscape CR80 card format with brushed dark carbon finish and centered 3D Umbrella watermark.
+   - **Left Column**: Operative portrait above a red-bordered `SECURITY LEVEL / CLEARANCE` block.
+   - **Center Column**: `PERSONAL INFORMATION` block listing `NAME`, `YEAR OF BIRTH`, `SEX`, `BLOODTYPE`, `ACCESS`, `POSITION A`, `POSITION B`, and spaced numeric registry serial (`220-XXXXXXX-XXXX`).
+   - **Right Column**: Dermal ridge fingerprint verification box above a metallic gold smart-card contact chip.
+   - **Bottom Strip**: Full-width Code-128 barcode above the corporate motto *"OUR BUSINESS IS LIFE ITSELF"*.
+
+## Authorized Umbrella Divisions
+- Security Personnel
+- U.B.C.S. (Umbrella Biohazard Countermeasure Service)
+- U.S.S. (Umbrella Security Service)
+- Virology & Research Division
+- The Hive Facility Operations
+- Executive Management
+
+## Security Clearance Tiers
+- **Level 1**: Surface Reception & Perimeter Transit
+- **Level 2**: General Administration & Logistics Sub-Level
+- **Level 3**: Bio-Containment Support & Diagnostics
+- **Level 4**: Restricted Viral Testing & Sector B Labs
+- **Level 5**: Deep Hive Operations & Red Queen Chamber
+- **Clearance A**: Directorate Command — Unrestricted All Areas

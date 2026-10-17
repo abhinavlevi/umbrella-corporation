@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://umbrella-hive-id.app/</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-default.png</image:loc>
+      <image:title>Umbrella Corporation — The Hive Access Badge System</image:title>
+      <image:caption>Official Umbrella Corporation Personnel, Facility Keycard, and Classified Hive Security Pass Registry</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://umbrella-hive-id.app/?preset=alice</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-alice.png</image:loc>
+      <image:title>Alice Abernathy — Umbrella Corporation Security Clearance Level 5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://umbrella-hive-id.app/?preset=carlos</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-carlos.png</image:loc>
+      <image:title>Carlos Olivera — U.B.C.S. Delta Platoon Clearance Level 5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://umbrella-hive-id.app/?preset=wesker</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-wesker.png</image:loc>
+      <image:title>Albert Wesker — Umbrella Executive Directorate Clearance A Pass</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://umbrella-hive-id.app/?preset=hunk</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-hunk.png</image:loc>
+      <image:title>HUNK — U.S.S. Alpha Team Commander Security Pass</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://umbrella-hive-id.app/?preset=birkin</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://umbrella-hive-id.app/og/og-birkin.png</image:loc>
+      <image:title>Dr. William Birkin — Umbrella Virology Director Clearance A</image:title>
+    </image:image>
+  </url>
+</urlset>

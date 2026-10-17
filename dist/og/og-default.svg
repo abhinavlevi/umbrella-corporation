@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+    <defs>
+      <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#090b0e"/>
+        <stop offset="55%" stop-color="#11141b"/>
+        <stop offset="100%" stop-color="#1a0b0d"/>
+      </linearGradient>
+      <radialGradient id="redGlow" cx="75%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#dc2626" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="#090b0e" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <rect width="1200" height="630" fill="url(#bgGrad)"/>
+    <rect width="1200" height="630" fill="url(#redGlow)"/>
+
+    <!-- Subtle Laboratory Grid -->
+    <g stroke="#ffffff" stroke-opacity="0.035" stroke-width="1">
+      <line x1="0" y1="0" x2="0" y2="630"/><line x1="50" y1="0" x2="50" y2="630"/><line x1="100" y1="0" x2="100" y2="630"/><line x1="150" y1="0" x2="150" y2="630"/><line x1="200" y1="0" x2="200" y2="630"/><line x1="250" y1="0" x2="250" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/><line x1="350" y1="0" x2="350" y2="630"/><line x1="400" y1="0" x2="400" y2="630"/><line x1="450" y1="0" x2="450" y2="630"/><line x1="500" y1="0" x2="500" y2="630"/><line x1="550" y1="0" x2="550" y2="630"/><line x1="600" y1="0" x2="600" y2="630"/><line x1="650" y1="0" x2="650" y2="630"/><line x1="700" y1="0" x2="700" y2="630"/><line x1="750" y1="0" x2="750" y2="630"/><line x1="800" y1="0" x2="800" y2="630"/><line x1="850" y1="0" x2="850" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/><line x1="950" y1="0" x2="950" y2="630"/><line x1="1000" y1="0" x2="1000" y2="630"/><line x1="1050" y1="0" x2="1050" y2="630"/><line x1="1100" y1="0" x2="1100" y2="630"/><line x1="1150" y1="0" x2="1150" y2="630"/>
+      <line x1="0" y1="0" x2="1200" y2="0"/><line x1="0" y1="50" x2="1200" y2="50"/><line x1="0" y1="100" x2="1200" y2="100"/><line x1="0" y1="150" x2="1200" y2="150"/><line x1="0" y1="200" x2="1200" y2="200"/><line x1="0" y1="250" x2="1200" y2="250"/><line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="350" x2="1200" y2="350"/><line x1="0" y1="400" x2="1200" y2="400"/><line x1="0" y1="450" x2="1200" y2="450"/><line x1="0" y1="500" x2="1200" y2="500"/><line x1="0" y1="550" x2="1200" y2="550"/><line x1="0" y1="600" x2="1200" y2="600"/>
+    </g>
+
+    <rect x="0" y="0" width="1200" height="6" fill="#dc2626"/>
+    <rect x="0" y="624" width="1200" height="6" fill="#991b1b"/>
+
+    <!-- Left Column: Corporate Lockup -->
+    <g transform="translate(72, 84)">
+      <g>
+        <polygon points="44,44 27.93,5.20 60.07,5.20" fill="#dc2626" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 60.07,5.20 82.80,27.93" fill="#ffffff" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 82.80,27.93 82.80,60.07" fill="#dc2626" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 82.80,60.07 60.07,82.80" fill="#ffffff" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 60.07,82.80 27.93,82.80" fill="#dc2626" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 27.93,82.80 5.20,60.07" fill="#ffffff" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 5.20,60.07 5.20,27.93" fill="#dc2626" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="44,44 5.20,27.93 27.93,5.20" fill="#ffffff" stroke="#27272a" stroke-width="2.2" stroke-linejoin="round"/><polygon points="27.93,5.20 60.07,5.20 82.80,27.93 82.80,60.07 60.07,82.80 27.93,82.80 5.20,60.07 5.20,27.93" fill="none" stroke="#27272a" stroke-width="2.7" stroke-linejoin="round"/>
+      </g>
+      <text x="106" y="40" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="30" letter-spacing="6">UMBRELLA</text>
+      <text x="106" y="68" fill="#a1a1aa" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="16" letter-spacing="8">CORPORATION</text>
+
+      <rect x="0" y="114" width="356" height="34" rx="6" fill="#450a0a" stroke="#dc2626" stroke-width="1.5"/>
+      <circle cx="20" cy="131" r="5" fill="#ef4444"/>
+      <text x="36" y="136" fill="#fecaca" font-family="Courier New, monospace" font-weight="700" font-size="14" letter-spacing="2.5">CENTRAL CREDENTIAL REGISTRY</text>
+
+      <text x="0" y="210" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="50" letter-spacing="1.5">THE HIVE ACCESS</text>
+      <text x="0" y="268" fill="#ef4444" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="50" letter-spacing="1.5">BADGE SYSTEM</text>
+
+      <text x="0" y="316" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="20">Official Raccoon City Underground Research</text>
+      <text x="0" y="344" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="20">Facility Personnel &amp; Security Clearance Bureau.</text>
+
+      <g transform="translate(0, 382)">
+        <rect x="0" y="0" width="166" height="38" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+        <text x="83" y="24" text-anchor="middle" fill="#e4e4e7" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" letter-spacing="1.2">PERSONNEL ID</text>
+
+        <rect x="178" y="0" width="166" height="38" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+        <text x="261" y="24" text-anchor="middle" fill="#e4e4e7" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" letter-spacing="1.2">SECTOR KEYCARDS</text>
+
+        <rect x="356" y="0" width="174" height="38" rx="8" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+        <text x="443" y="24" text-anchor="middle" fill="#e4e4e7" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" letter-spacing="1.2">DIRECTORATE PASS</text>
+      </g>
+
+      <text x="0" y="476" fill="#71717a" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="13" letter-spacing="5">OUR BUSINESS IS LIFE ITSELF</text>
+    </g>
+
+    <!-- Right Column: Visual Showcase of Vertical & Horizontal Badges -->
+    <g transform="translate(650, 78)">
+      <rect x="0" y="0" width="470" height="295" rx="14" fill="#090a0f" stroke="#3f3f46" stroke-width="2"/>
+      <text x="200" y="38" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="24" letter-spacing="5">UMBRELLA</text>
+      <text x="200" y="55" text-anchor="middle" fill="#d4d4d8" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" letter-spacing="4">CORPORATION</text>
+      <polygon points="418,38 408.82,15.83 427.18,15.83" fill="#dc2626" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 427.18,15.83 440.17,28.82" fill="#ffffff" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 440.17,28.82 440.17,47.18" fill="#dc2626" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 440.17,47.18 427.18,60.17" fill="#ffffff" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 427.18,60.17 408.82,60.17" fill="#dc2626" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 408.82,60.17 395.83,47.18" fill="#ffffff" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 395.83,47.18 395.83,28.82" fill="#dc2626" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="418,38 395.83,28.82 408.82,15.83" fill="#ffffff" stroke="#52525b" stroke-width="1.5" stroke-linejoin="round"/><polygon points="408.82,15.83 427.18,15.83 440.17,28.82 440.17,47.18 427.18,60.17 408.82,60.17 395.83,47.18 395.83,28.82" fill="none" stroke="#52525b" stroke-width="2" stroke-linejoin="round"/>
+      <g>
+      <rect x="24" y="70" width="102" height="112" fill="#cbd5e1"/>
+      <path d="M36.24 182 C42.36 150.64, 107.64 150.64, 113.76 182 Z" fill="#090b0e"/>
+      <ellipse cx="75" cy="121.03999999999999" rx="22.44" ry="29.12" fill="#f1d5c4"/>
+      <path d="M52.56 111.03999999999999 C52.56 85.67999999999999, 97.44 85.67999999999999, 97.44 111.03999999999999 Z" fill="#c7a563"/>
+      <rect x="54.599999999999994" y="114.03999999999999" width="40.800000000000004" height="10.08" rx="2" fill="#020617"/>
+    </g>
+      <rect x="24" y="70" width="102" height="112" fill="none" stroke="#991b1b" stroke-width="2"/>
+      <rect x="24" y="190" width="102" height="42" fill="#050608" stroke="#dc2626" stroke-width="1.5"/>
+      <text x="75" y="206" text-anchor="middle" fill="#ef4444" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="10" letter-spacing="1.5">SECURITY LEVEL</text>
+      <text x="75" y="224" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="14" letter-spacing="1.5">CLEARANCE A</text>
+      <g fill="#f4f4f5" font-family="Courier New, monospace" font-weight="700" font-size="13">
+        <text x="144" y="92">NAME: ALBERT WESKER</text>
+        <text x="144" y="114">YEAR OF BIRTH: 1960</text>
+        <text x="144" y="136">SEX: MALE / BLOOD: O</text>
+        <text x="144" y="158">ACCESS: ALL AREAS</text>
+        <text x="144" y="180">POS A: RESEARCHER</text>
+        <text x="144" y="202">POS B: SECURITY OFFICER</text>
+        <text x="144" y="228" fill="#a1a1aa" font-size="12" letter-spacing="3">220-8543077-7060</text>
+      </g>
+      <rect x="374" y="176" width="68" height="52" rx="8" fill="#eab308" stroke="#713f12" stroke-width="2"/>
+      <rect x="0" y="246" width="470" height="24" fill="#e4e4e7"/>
+      <rect x="12" y="248" width="2" height="20" fill="#09090b"/><rect x="20" y="248" width="3" height="20" fill="#09090b"/><rect x="28" y="248" width="4" height="20" fill="#09090b"/><rect x="36" y="248" width="2" height="20" fill="#09090b"/><rect x="44" y="248" width="3" height="20" fill="#09090b"/><rect x="52" y="248" width="4" height="20" fill="#09090b"/><rect x="60" y="248" width="2" height="20" fill="#09090b"/><rect x="68" y="248" width="3" height="20" fill="#09090b"/><rect x="76" y="248" width="4" height="20" fill="#09090b"/><rect x="84" y="248" width="2" height="20" fill="#09090b"/><rect x="92" y="248" width="3" height="20" fill="#09090b"/><rect x="100" y="248" width="4" height="20" fill="#09090b"/><rect x="108" y="248" width="2" height="20" fill="#09090b"/><rect x="116" y="248" width="3" height="20" fill="#09090b"/><rect x="124" y="248" width="4" height="20" fill="#09090b"/><rect x="132" y="248" width="2" height="20" fill="#09090b"/><rect x="140" y="248" width="3" height="20" fill="#09090b"/><rect x="148" y="248" width="4" height="20" fill="#09090b"/><rect x="156" y="248" width="2" height="20" fill="#09090b"/><rect x="164" y="248" width="3" height="20" fill="#09090b"/><rect x="172" y="248" width="4" height="20" fill="#09090b"/><rect x="180" y="248" width="2" height="20" fill="#09090b"/><rect x="188" y="248" width="3" height="20" fill="#09090b"/><rect x="196" y="248" width="4" height="20" fill="#09090b"/><rect x="204" y="248" width="2" height="20" fill="#09090b"/><rect x="212" y="248" width="3" height="20" fill="#09090b"/><rect x="220" y="248" width="4" height="20" fill="#09090b"/><rect x="228" y="248" width="2" height="20" fill="#09090b"/><rect x="236" y="248" width="3" height="20" fill="#09090b"/><rect x="244" y="248" width="4" height="20" fill="#09090b"/><rect x="252" y="248" width="2" height="20" fill="#09090b"/><rect x="260" y="248" width="3" height="20" fill="#09090b"/><rect x="268" y="248" width="4" height="20" fill="#09090b"/><rect x="276" y="248" width="2" height="20" fill="#09090b"/><rect x="284" y="248" width="3" height="20" fill="#09090b"/><rect x="292" y="248" width="4" height="20" fill="#09090b"/><rect x="300" y="248" width="2" height="20" fill="#09090b"/><rect x="308" y="248" width="3" height="20" fill="#09090b"/><rect x="316" y="248" width="4" height="20" fill="#09090b"/><rect x="324" y="248" width="2" height="20" fill="#09090b"/><rect x="332" y="248" width="3" height="20" fill="#09090b"/><rect x="340" y="248" width="4" height="20" fill="#09090b"/><rect x="348" y="248" width="2" height="20" fill="#09090b"/><rect x="356" y="248" width="3" height="20" fill="#09090b"/><rect x="364" y="248" width="4" height="20" fill="#09090b"/><rect x="372" y="248" width="2" height="20" fill="#09090b"/><rect x="380" y="248" width="3" height="20" fill="#09090b"/><rect x="388" y="248" width="4" height="20" fill="#09090b"/><rect x="396" y="248" width="2" height="20" fill="#09090b"/><rect x="404" y="248" width="3" height="20" fill="#09090b"/><rect x="412" y="248" width="4" height="20" fill="#09090b"/><rect x="420" y="248" width="2" height="20" fill="#09090b"/><rect x="428" y="248" width="3" height="20" fill="#09090b"/><rect x="436" y="248" width="4" height="20" fill="#09090b"/><rect x="444" y="248" width="2" height="20" fill="#09090b"/>
+      <text x="235" y="286" text-anchor="middle" fill="#a1a1aa" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="9" letter-spacing="5">OUR BUSINESS IS LIFE ITSELF</text>
+    </g>
+
+    <g transform="translate(590, 175)">
+      <rect x="0" y="0" width="275" height="395" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+      <text x="137" y="42" text-anchor="middle" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="24" letter-spacing="4">UMBRELLA</text>
+      <text x="137" y="60" text-anchor="middle" fill="#27272a" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" letter-spacing="5">CORPORATION</text>
+      <polygon points="74,128 55.63,83.65 92.37,83.65" fill="#dc2626" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 92.37,83.65 118.35,109.63" fill="#ffffff" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 118.35,109.63 118.35,146.37" fill="#dc2626" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 118.35,146.37 92.37,172.35" fill="#ffffff" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 92.37,172.35 55.63,172.35" fill="#dc2626" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 55.63,172.35 29.65,146.37" fill="#ffffff" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 29.65,146.37 29.65,109.63" fill="#dc2626" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="74,128 29.65,109.63 55.63,83.65" fill="#ffffff" stroke="#111111" stroke-width="2.2" stroke-linejoin="round"/><polygon points="55.63,83.65 92.37,83.65 118.35,109.63 118.35,146.37 92.37,172.35 55.63,172.35 29.65,146.37 29.65,109.63" fill="none" stroke="#111111" stroke-width="2.7" stroke-linejoin="round"/>
+      <g>
+    <rect x="142" y="80" width="104" height="100" fill="#e2e8f0"/>
+    <path d="M157.6 180 C164.88 155, 223.12 155, 230.39999999999998 180 Z" fill="#1e2024"/>
+    <ellipse cx="194" cy="128" rx="27.04" ry="28.000000000000004" fill="#2b1d14"/>
+    <ellipse cx="194" cy="127" rx="19.76" ry="23" fill="#f0cab6"/>
+  </g>
+      <rect x="142" y="80" width="104" height="100" fill="none" stroke="#b91c1c" stroke-width="3"/>
+      <rect x="0" y="198" width="275" height="38" fill="#48484a"/>
+      <text x="137" y="223" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="19">Alice Abernathy</text>
+      <text x="137" y="256" text-anchor="middle" fill="#c41e24" font-family="Courier New, monospace" font-weight="700" font-size="15" letter-spacing="3">CLEARANCE LEVEL 5</text>
+      <g fill="#18181b" font-family="Courier New, monospace" font-weight="700" font-size="11">
+        <text x="22" y="286">Division: Security</text>
+        <text x="22" y="303">HEIGHT: 5'9</text>
+        <text x="22" y="320">WEIGHT: 130lbs</text>
+        <text x="22" y="337">EYES: Grey</text>
+        <text x="22" y="354">HAIR: Blonde</text>
+      </g>
+      <rect x="176" y="274" width="74" height="74" fill="#111111"/>
+      <rect x="182" y="280" width="18" height="18" fill="#ffffff"/>
+      <rect x="226" y="280" width="18" height="18" fill="#ffffff"/>
+      <rect x="182" y="324" width="18" height="18" fill="#ffffff"/>
+      <rect x="206" y="302" width="16" height="16" fill="#ffffff"/>
+      <text x="137" y="378" text-anchor="middle" fill="#3f3f46" font-family="Courier New, monospace" font-size="8">Property of the Umbrella Corporation</text>
+    </g>
+  </svg>

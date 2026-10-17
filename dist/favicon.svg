@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="umbRed" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="50%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+    <linearGradient id="umbWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#d4d4d8" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b0d10" />
+  <!-- 8-segment Umbrella Octagon centered at (32, 32), radius 26 -->
+  <!-- Segment 1: Top (Red) -->
+  <polygon points="32,32 22.05,7.98 41.95,7.98" fill="url(#umbRed)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 2: Top-Right (White) -->
+  <polygon points="32,32 41.95,7.98 56.02,22.05" fill="url(#umbWhite)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 3: Right (Red) -->
+  <polygon points="32,32 56.02,22.05 56.02,41.95" fill="url(#umbRed)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 4: Bottom-Right (White) -->
+  <polygon points="32,32 56.02,41.95 41.95,56.02" fill="url(#umbWhite)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 5: Bottom (Red) -->
+  <polygon points="32,32 41.95,56.02 22.05,56.02" fill="url(#umbRed)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 6: Bottom-Left (White) -->
+  <polygon points="32,32 22.05,56.02 7.98,41.95" fill="url(#umbWhite)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 7: Left (Red) -->
+  <polygon points="32,32 7.98,41.95 7.98,22.05" fill="url(#umbRed)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Segment 8: Top-Left (White) -->
+  <polygon points="32,32 7.98,22.05 22.05,7.98" fill="url(#umbWhite)" stroke="#09090b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Outer Metallic Trim -->
+  <polygon points="22.05,7.98 41.95,7.98 56.02,22.05 56.02,41.95 41.95,56.02 22.05,56.02 7.98,41.95 7.98,22.05" fill="none" stroke="#52525b" stroke-width="1.6" stroke-linejoin="round" />
+</svg>

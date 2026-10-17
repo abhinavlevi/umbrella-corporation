@@ -113,7 +113,7 @@ export const CLEARANCE_LEVELS: {
     value: 'Clearance A',
     verticalText: 'CLEARANCE LEVEL A',
     horizontalText: 'CLEARANCE A',
-    description: 'Directorate Command — Unrestricted All Areas',
+    description: 'Directorate Command - Unrestricted All Areas',
   },
 ];
 
@@ -449,7 +449,7 @@ export const OPERATIVE_PRESETS: OperativePreset[] = [
     subtitle: 'U.S.S. Special Security Unit',
     data: {
       style: 'classified',
-      fullName: 'H.U.N.K. — ALPHA',
+      fullName: 'H.U.N.K. - ALPHA',
       division: 'U.S.S. (Umbrella Security Service)',
       clearance: 'Level 5',
       height: "5'11",

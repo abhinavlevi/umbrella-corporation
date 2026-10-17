@@ -1,0 +1,53 @@
+# Umbrella Corporation — The Hive Central Registry Crawler Directives
+User-agent: *
+Allow: /
+Allow: /og/
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Social Preview Crawlers (Twitter/X, LinkedIn, Facebook, Discord, Slack)
+User-agent: Twitterbot
+Allow: /
+Allow: /og/
+
+User-agent: LinkedInBot
+Allow: /
+Allow: /og/
+
+User-agent: facebookexternalhit
+Allow: /
+Allow: /og/
+
+User-agent: Discordbot
+Allow: /
+Allow: /og/
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+Allow: /og/
+
+# Answer Engine & Generative AI Crawlers (AEO / GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://umbrella-hive-id.app/sitemap.xml

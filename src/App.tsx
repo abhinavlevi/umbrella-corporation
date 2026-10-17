@@ -6,8 +6,12 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
+  HelpCircle,
+  Image as ImageIcon,
+  Loader2,
   RotateCcw,
   Share2,
+  Shield,
   SlidersHorizontal,
   Volume2,
   VolumeX,
@@ -25,6 +29,34 @@ import {
 import { BadgePreview } from './components/BadgePreview';
 import { UmbrellaOctagonLogo } from './components/UmbrellaGraphics';
 import { hiveAudio } from './utils/soundFx';
+import { getBadgeOpenGraphImage, syncBadgeSeo } from './utils/seoManager';
+import { hostImageForSharing } from './utils/imageHost';
+
+function safeEncodePayload(obj: unknown): string {
+  const jsonStr = JSON.stringify(obj);
+  return btoa(
+    encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+      String.fromCharCode(parseInt(p1, 16))
+    )
+  );
+}
+
+function safeDecodePayload<T>(encoded: string): T | null {
+  try {
+    const jsonStr = decodeURIComponent(
+      Array.prototype.map
+        .call(atob(encoded), (c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonStr) as T;
+  } catch {
+    try {
+      return JSON.parse(atob(encoded)) as T;
+    } catch {
+      return null;
+    }
+  }
+}
 
 const DEFAULT_BADGE: BadgeData = {
   ...OPERATIVE_PRESETS[0].data,
@@ -37,19 +69,33 @@ export function App() {
   const [badgeData, setBadgeData] = useState<BadgeData>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      const presetParam = params.get('preset');
+      if (presetParam) {
+        const found = OPERATIVE_PRESETS.find((p) => p.id === presetParam);
+        if (found) {
+          return {
+            ...found.data,
+            photoZoom: 1,
+            photoOffsetX: 0,
+            photoOffsetY: 0,
+          };
+        }
+      }
       const encoded = params.get('dossier');
       if (encoded) {
         try {
-          const decoded = JSON.parse(atob(encoded));
-          const presetKey = decoded.presetId || 'alice';
-          return {
-            ...DEFAULT_BADGE,
-            ...decoded,
-            photoUrl:
-              decoded.photoUrl && !decoded.photoUrl.startsWith('blob:')
-                ? decoded.photoUrl
-                : OPERATIVE_PORTRAITS[presetKey] || OPERATIVE_PORTRAITS.alice,
-          };
+          const decoded = safeDecodePayload<Record<string, any>>(encoded);
+          if (decoded) {
+            const presetKey = (decoded.presetId as string) || 'alice';
+            return {
+              ...DEFAULT_BADGE,
+              ...decoded,
+              photoUrl:
+                decoded.photoUrl && !decoded.photoUrl.startsWith('blob:')
+                  ? decoded.photoUrl
+                  : OPERATIVE_PORTRAITS[presetKey] || OPERATIVE_PORTRAITS.alice,
+            };
+          }
         } catch {
           // Fall back to default
         }
@@ -59,10 +105,12 @@ export function App() {
   });
 
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isSharing, setIsSharing] = useState<boolean>(false);
   const [statusBanner, setStatusBanner] = useState<string | null>(null);
   const [showBiometrics, setShowBiometrics] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [showFramingControls, setShowFramingControls] = useState<boolean>(false);
+  const [showSocialCard, setShowSocialCard] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
@@ -74,6 +122,10 @@ export function App() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    syncBadgeSeo(badgeData, window.location.href);
+  }, [badgeData]);
 
   const toggleSound = () => {
     const next = !soundEnabled;
@@ -212,57 +264,74 @@ export function App() {
 
       showTemporaryStatus('Badge Download Complete');
     } catch {
-      showTemporaryStatus('Export Interrupted — Please Retry');
+      showTemporaryStatus('Export Interrupted - Please Retry');
     } finally {
       setIsExporting(false);
     }
   };
 
   const handleShare = async () => {
+    if (isSharing) return;
+    setIsSharing(true);
     hiveAudio.playSelectChirp();
-    const sharePayload = {
-      style: badgeData.style,
-      fullName: badgeData.fullName,
-      division: badgeData.division,
-      clearance: badgeData.clearance,
-      height: badgeData.height,
-      weight: badgeData.weight,
-      eyes: badgeData.eyes,
-      hair: badgeData.hair,
-      birthYear: badgeData.birthYear,
-      sex: badgeData.sex,
-      bloodType: badgeData.bloodType,
-      accessZone: badgeData.accessZone,
-      positionA: badgeData.positionA,
-      positionB: badgeData.positionB,
-      serialCode: badgeData.serialCode,
-      qrContent: badgeData.qrContent,
-      presetId: badgeData.presetId,
-    };
-
-    const encoded = btoa(JSON.stringify(sharePayload));
-    const shareUrl = `${window.location.origin}${window.location.pathname}?dossier=${encodeURIComponent(encoded)}`;
-    window.history.replaceState({}, '', shareUrl);
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `Umbrella Corporation Access Badge — ${badgeData.fullName}`,
-          text: `Umbrella Corporation Access Credential for ${badgeData.fullName} (${badgeData.clearance}).`,
-          url: shareUrl,
-        });
-        showTemporaryStatus('Link Shared Successfully');
-        return;
-      } catch {
-        // User dismissed
-      }
-    }
+    showTemporaryStatus('Securing Operative Record & Preparing Public Link...');
 
     try {
-      await navigator.clipboard.writeText(shareUrl);
-      showTemporaryStatus('Badge Link Copied to Clipboard');
+      // If operative has a photo and style is not facility pass, upload an optimized copy for remote viewing
+      let publicPhotoUrl: string | undefined = undefined;
+      if (badgeData.style !== 'facility' && badgeData.photoUrl) {
+        publicPhotoUrl = await hostImageForSharing(badgeData.photoUrl);
+      }
+
+      const sharePayload = {
+        style: badgeData.style,
+        fullName: badgeData.fullName,
+        division: badgeData.division,
+        clearance: badgeData.clearance,
+        height: badgeData.height,
+        weight: badgeData.weight,
+        eyes: badgeData.eyes,
+        hair: badgeData.hair,
+        birthYear: badgeData.birthYear,
+        sex: badgeData.sex,
+        bloodType: badgeData.bloodType,
+        accessZone: badgeData.accessZone,
+        positionA: badgeData.positionA,
+        positionB: badgeData.positionB,
+        serialCode: badgeData.serialCode,
+        qrContent: badgeData.qrContent,
+        presetId: badgeData.presetId,
+        photoUrl: publicPhotoUrl,
+      };
+
+      const encoded = safeEncodePayload(sharePayload);
+      const shareUrl = `${window.location.origin}${window.location.pathname}?dossier=${encodeURIComponent(encoded)}`;
+      window.history.replaceState({}, '', shareUrl);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `Umbrella Corporation Access Badge - ${badgeData.fullName}`,
+            text: `Umbrella Corporation Access Credential for ${badgeData.fullName} (${badgeData.clearance}).`,
+            url: shareUrl,
+          });
+          showTemporaryStatus('Credential Link Shared Successfully');
+          return;
+        } catch {
+          // User canceled share sheet; fallback to clipboard
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        showTemporaryStatus('Credential Link Copied to Clipboard');
+      } catch {
+        showTemporaryStatus('Credential Link Updated in Browser');
+      }
     } catch {
-      showTemporaryStatus('Badge Link Updated');
+      showTemporaryStatus('Sharing Interrupted - Please Retry');
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -416,7 +485,7 @@ export function App() {
                       >
                         {UMBRELLA_DIVISIONS.map((div) => (
                           <option key={div.value} value={div.value}>
-                            {div.shortBadgeLabel} — {div.value}
+                            {div.shortBadgeLabel} - {div.value}
                           </option>
                         ))}
                       </select>
@@ -503,6 +572,14 @@ export function App() {
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Reset</span>
                     </button>
+                  </div>
+
+                  {/* Terminal Privacy & Public Sharing Disclosure */}
+                  <div className="p-2.5 rounded-lg bg-[#0b0d10] border border-zinc-800 text-[11px] text-zinc-400 leading-relaxed">
+                    <span className="font-semibold text-zinc-300 block mb-0.5">
+                      Terminal Privacy &amp; Sharing Notice:
+                    </span>
+                    Uploaded photographs remain strictly local on your workstation for badge customization and high-resolution printing. Your image is never transmitted externally when designing or downloading badges. Only if you generate a public share link will an optimized version be securely hosted so recipients can view your credential.
                   </div>
 
                   {/* Image Zoom & Alignment Controls */}
@@ -839,19 +916,118 @@ export function App() {
               <button
                 type="button"
                 onClick={handleShare}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent hover:bg-zinc-800/80 border border-zinc-700 text-zinc-200 font-medium text-sm transition cursor-pointer"
+                disabled={isSharing}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent hover:bg-zinc-800/80 border border-zinc-700 text-zinc-200 font-medium text-sm transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <Share2 className="w-4 h-4 text-zinc-400" />
-                <span>Share</span>
+                {isSharing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 text-red-500 animate-spin" />
+                    <span>Securing Link...</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-4 h-4 text-zinc-400" />
+                    <span>Share Credential</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
         </div>
+
+        {/* Semantic Corporate Reference & AEO/GEO Knowledge Base */}
+        <section aria-labelledby="corporate-reference-heading" className="mt-14 border-t border-zinc-800/80 pt-10 pb-4">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/50 border border-red-800/60 text-xs font-semibold text-red-300 tracking-wider uppercase">
+                <Shield className="w-3.5 h-3.5 text-red-400" />
+                <span>Facility Credential Specifications</span>
+              </div>
+              <h2 id="corporate-reference-heading" className="text-xl sm:text-2xl font-bold text-white tracking-wide">
+                Umbrella Corporation Credential Architecture
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                Standard technical operating parameters, physical CR80 dimensions, and clearance tier protocols for the Raccoon City underground research complex.
+              </p>
+            </div>
+
+            {/* 3 Supported Specifications Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
+                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
+                  Format A: Personnel Pass
+                </div>
+                <div className="text-xs text-zinc-300 font-medium">Standard Vertical ID Card</div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  Vertical white laminate with 8-segment Umbrella octagon, red-bordered portrait frame, full-width charcoal name band, physical typewriter specs, and high-density checkpoint QR.
+                </p>
+              </div>
+
+              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
+                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
+                  Format B: Facility Keycard
+                </div>
+                <div className="text-xs text-zinc-300 font-medium">Departmental Bulkhead Pass</div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  Non-portrait vertical keycard centered around the crimson Umbrella octagon with wide division banner (Security, U.B.C.S., Lab Staff, Executive) and optical access code.
+                </p>
+              </div>
+
+              <div className="bg-[#14171d] border border-zinc-800 rounded-xl p-4 space-y-2">
+                <div className="text-xs font-bold uppercase tracking-wider text-red-400">
+                  Format C: Classified Black
+                </div>
+                <div className="text-xs text-zinc-300 font-medium">Directorate High-Security Pass</div>
+                <p className="text-[11px] text-zinc-400 leading-relaxed">
+                  Horizontal CR80 matte card with 3D watermark, metallic crest, red-bordered Security Level block, personal dossier, biometric fingerprint, gold EMV chip, and Code-128 barcode.
+                </p>
+              </div>
+            </div>
+
+            {/* Accordion FAQ using native HTML <details> and <summary> per modern guidance */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-3">
+                <HelpCircle className="w-4 h-4 text-red-500" />
+                <span>Frequently Answered Operational Queries (AEO/GEO Index)</span>
+              </div>
+
+              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
+                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
+                  <span>How are physical cards scaled for 300 DPI PVC badge printing?</span>
+                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
+                </summary>
+                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                  The Hive ID Generator exports DOM elements at a 3x retina pixel ratio directly through html-to-image. Vertical passes output at 1020×1614 px and horizontal passes output at 1620×1020 px, aligning with CR80 standard dimensions (85.60 × 53.98 mm) at 300 DPI print fidelity.
+                </p>
+              </details>
+
+              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
+                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
+                  <span>What security clearance designations are authorized within The Hive?</span>
+                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
+                </summary>
+                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                  The facility operates on a 6-tier authorization structure: Level 1 (Surface Reception &amp; Transit), Level 2 (Logistics Sub-Level), Level 3 (Bio-Containment Diagnostics), Level 4 (Restricted Sector B Viral Labs), Level 5 (Deep Hive &amp; Red Queen Chamber), and Clearance A (Directorate Command with unrestricted facility access).
+                </p>
+              </details>
+
+              <details className="group bg-[#14171d] border border-zinc-800 rounded-xl p-4 transition">
+                <summary className="text-xs sm:text-sm font-semibold text-zinc-200 cursor-pointer list-none flex items-center justify-between">
+                  <span>How do shareable permalinks and OpenGraph preview cards function?</span>
+                  <span className="text-red-500 group-open:rotate-180 transition-transform text-xs">▼</span>
+                </summary>
+                <p className="text-xs text-zinc-400 mt-3 leading-relaxed">
+                  Clicking "Share &amp; Social Link" generates an in-memory encoded URL parameter and dynamically synchronizes OpenGraph &amp; Twitter Card meta tags. When posted to Twitter/X, LinkedIn, Discord, or Slack, the link automatically renders an operative-specific 1200×630 preview card.
+                </p>
+              </details>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Corporate Minimal Footer */}
       <footer className="border-t border-zinc-900 bg-[#0a0c0f] py-4 px-4 sm:px-6 text-center text-xs text-zinc-400 tracking-wider">
-        UMBRELLA CORPORATION — OUR BUSINESS IS LIFE ITSELF
+        UMBRELLA CORPORATION - OUR BUSINESS IS LIFE ITSELF
       </footer>
     </div>
   );
