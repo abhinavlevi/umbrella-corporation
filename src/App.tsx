@@ -29,15 +29,6 @@ import { hiveAudio } from './utils/soundFx';
 import { syncBadgeSeo } from './utils/seoManager';
 import { hostImageForSharing } from './utils/imageHost';
 
-function safeEncodePayload(obj: unknown): string {
-  const jsonStr = JSON.stringify(obj);
-  return btoa(
-    encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-      String.fromCharCode(parseInt(p1, 16))
-    )
-  );
-}
-
 function safeDecodePayload<T>(encoded: string): T | null {
   try {
     const jsonStr = decodeURIComponent(
@@ -62,44 +53,117 @@ const DEFAULT_BADGE: BadgeData = {
   photoOffsetY: 0,
 };
 
-export function App() {
-  const [badgeData, setBadgeData] = useState<BadgeData>(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const presetParam = params.get('preset');
-      if (presetParam) {
-        const found = OPERATIVE_PRESETS.find((p) => p.id === presetParam);
-        if (found) {
-          return {
-            ...found.data,
-            photoZoom: 1,
-            photoOffsetX: 0,
-            photoOffsetY: 0,
-          };
-        }
+function parseBadgeFromUrl(): BadgeData {
+  if (typeof window === 'undefined') return DEFAULT_BADGE;
+
+  const params = new URLSearchParams(window.location.search);
+
+  // 1. Backward compatibility for legacy ?dossier= (full Base64 JSON)
+  const legacyDossier = params.get('dossier');
+  if (legacyDossier) {
+    try {
+      const decoded = safeDecodePayload<Record<string, any>>(legacyDossier);
+      if (decoded) {
+        const presetKey = (decoded.presetId as string) || 'alice';
+        return {
+          ...DEFAULT_BADGE,
+          ...decoded,
+          photoUrl:
+            decoded.photoUrl && !decoded.photoUrl.startsWith('blob:')
+              ? decoded.photoUrl
+              : OPERATIVE_PORTRAITS[presetKey] || OPERATIVE_PORTRAITS.alice,
+        };
       }
-      const encoded = params.get('dossier');
-      if (encoded) {
-        try {
-          const decoded = safeDecodePayload<Record<string, any>>(encoded);
-          if (decoded) {
-            const presetKey = (decoded.presetId as string) || 'alice';
-            return {
-              ...DEFAULT_BADGE,
-              ...decoded,
-              photoUrl:
-                decoded.photoUrl && !decoded.photoUrl.startsWith('blob:')
-                  ? decoded.photoUrl
-                  : OPERATIVE_PORTRAITS[presetKey] || OPERATIVE_PORTRAITS.alice,
-            };
-          }
-        } catch {
-          // Fall back to default
-        }
-      }
+    } catch {
+      // Fall through to standard parsing
     }
-    return DEFAULT_BADGE;
-  });
+  }
+
+  // 2. Compact, readable query parameters (?p=alice, ?n=Leon, etc.)
+  const presetKey = params.get('p') || params.get('preset') || 'alice';
+  const foundPreset = OPERATIVE_PRESETS.find((p) => p.id === presetKey) || OPERATIVE_PRESETS[0];
+
+  const badge: BadgeData = {
+    ...foundPreset.data,
+    photoZoom: 1,
+    photoOffsetX: 0,
+    photoOffsetY: 0,
+  };
+
+  if (params.has('s')) badge.style = params.get('s') as BadgeStyle;
+  if (params.has('n')) badge.fullName = params.get('n')!;
+  if (params.has('d')) badge.division = params.get('d') as UmbrellaDivision;
+  if (params.has('c')) badge.clearance = params.get('c') as ClearanceLevel;
+  if (params.has('img')) {
+    const imgUrl = params.get('img')!;
+    if (imgUrl.startsWith('http')) badge.photoUrl = imgUrl;
+  }
+  if (params.has('h')) badge.height = params.get('h')!;
+  if (params.has('w')) badge.weight = params.get('w')!;
+  if (params.has('e')) badge.eyes = params.get('e')!;
+  if (params.has('hr')) badge.hair = params.get('hr')!;
+  if (params.has('by')) badge.birthYear = params.get('by')!;
+  if (params.has('sx')) badge.sex = params.get('sx')!;
+  if (params.has('bt')) badge.bloodType = params.get('bt')!;
+  if (params.has('z')) badge.accessZone = params.get('z')!;
+  if (params.has('pa')) badge.positionA = params.get('pa')!;
+  if (params.has('pb')) badge.positionB = params.get('pb')!;
+  if (params.has('sc')) badge.serialCode = params.get('sc')!;
+  if (params.has('qr')) badge.qrContent = params.get('qr')!;
+  if (params.has('pz')) badge.photoZoom = parseFloat(params.get('pz')!) || 1;
+  if (params.has('px')) badge.photoOffsetX = parseInt(params.get('px')!, 10) || 0;
+  if (params.has('py')) badge.photoOffsetY = parseInt(params.get('py')!, 10) || 0;
+
+  return badge;
+}
+
+function generateShareUrl(badgeData: BadgeData, publicPhotoUrl?: string): string {
+  const origin = window.location.origin;
+  const pathname = window.location.pathname;
+  const basePreset =
+    OPERATIVE_PRESETS.find((p) => p.id === badgeData.presetId) || OPERATIVE_PRESETS[0];
+
+  const params = new URLSearchParams();
+
+  // Only include attributes that differ from base preset defaults
+  if (badgeData.style !== basePreset.data.style) params.set('s', badgeData.style);
+  if (badgeData.fullName !== basePreset.data.fullName) params.set('n', badgeData.fullName);
+  if (badgeData.division !== basePreset.data.division) params.set('d', badgeData.division);
+  if (badgeData.clearance !== basePreset.data.clearance) params.set('c', badgeData.clearance);
+  if (publicPhotoUrl) params.set('img', publicPhotoUrl);
+  if (badgeData.height !== basePreset.data.height) params.set('h', badgeData.height);
+  if (badgeData.weight !== basePreset.data.weight) params.set('w', badgeData.weight);
+  if (badgeData.eyes !== basePreset.data.eyes) params.set('e', badgeData.eyes);
+  if (badgeData.hair !== basePreset.data.hair) params.set('hr', badgeData.hair);
+  if (badgeData.birthYear !== basePreset.data.birthYear) params.set('by', badgeData.birthYear);
+  if (badgeData.sex !== basePreset.data.sex) params.set('sx', badgeData.sex);
+  if (badgeData.bloodType !== basePreset.data.bloodType) params.set('bt', badgeData.bloodType);
+  if (badgeData.accessZone !== basePreset.data.accessZone) params.set('z', badgeData.accessZone);
+  if (badgeData.positionA !== basePreset.data.positionA) params.set('pa', badgeData.positionA);
+  if (badgeData.positionB !== basePreset.data.positionB) params.set('pb', badgeData.positionB);
+  if (badgeData.serialCode !== basePreset.data.serialCode) params.set('sc', badgeData.serialCode);
+  if (badgeData.qrContent !== basePreset.data.qrContent) params.set('qr', badgeData.qrContent);
+  if (badgeData.photoZoom && badgeData.photoZoom !== 1) params.set('pz', String(badgeData.photoZoom));
+  if (badgeData.photoOffsetX) params.set('px', String(badgeData.photoOffsetX));
+  if (badgeData.photoOffsetY) params.set('py', String(badgeData.photoOffsetY));
+
+  const hasDiffs = Array.from(params.keys()).length > 0;
+
+  // Unmodified preset: super short clean URL (e.g. ?p=alice)
+  if (!hasDiffs) {
+    return `${origin}${pathname}?p=${badgeData.presetId}`;
+  }
+
+  // Include preset base if not alice
+  if (badgeData.presetId !== 'alice') {
+    params.set('p', badgeData.presetId);
+  }
+
+  return `${origin}${pathname}?${params.toString()}`;
+}
+
+export function App() {
+  const [badgeData, setBadgeData] = useState<BadgeData>(parseBadgeFromUrl);
 
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [isSharing, setIsSharing] = useState<boolean>(false);
@@ -288,32 +352,7 @@ export function App() {
         }
       }
 
-      const sharePayload: Record<string, string | number | undefined> = {
-        style: badgeData.style,
-        fullName: badgeData.fullName,
-        division: badgeData.division,
-        clearance: badgeData.clearance,
-        height: badgeData.height,
-        weight: badgeData.weight,
-        eyes: badgeData.eyes,
-        hair: badgeData.hair,
-        birthYear: badgeData.birthYear,
-        sex: badgeData.sex,
-        bloodType: badgeData.bloodType,
-        accessZone: badgeData.accessZone,
-        positionA: badgeData.positionA,
-        positionB: badgeData.positionB,
-        serialCode: badgeData.serialCode,
-        qrContent: badgeData.qrContent,
-        presetId: badgeData.presetId,
-      };
-
-      if (publicPhotoUrl) {
-        sharePayload.photoUrl = publicPhotoUrl;
-      }
-
-      const encoded = safeEncodePayload(sharePayload);
-      const shareUrl = `${window.location.origin}${window.location.pathname}?dossier=${encodeURIComponent(encoded)}`;
+      const shareUrl = generateShareUrl(badgeData, publicPhotoUrl);
       window.history.replaceState({}, '', shareUrl);
 
       if (navigator.share) {
