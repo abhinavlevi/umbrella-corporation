@@ -15,12 +15,45 @@ import {
 interface BadgePreviewProps {
   data: BadgeData;
   badgeRef?: React.RefObject<HTMLDivElement | null>;
+  side?: 'front' | 'back';
 }
 
 export const BadgePreview: React.FC<BadgePreviewProps> = ({
   data,
   badgeRef,
+  side = 'front',
 }) => {
+  if (side === 'back') {
+    if (data.style === 'classified') {
+      return (
+        <div
+          id="umbrella-id-card"
+          ref={badgeRef}
+          className="relative w-[540px] h-[342px] rounded-[14px] bg-[#08090c] text-white overflow-hidden border-0 ring-0 outline-none flex items-center justify-center select-none"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px)',
+            }}
+          />
+          <UmbrellaOctagonLogo className="w-[190px] h-[190px] relative z-10" variant="classic" />
+        </div>
+      );
+    }
+
+    // Vertical cards (Personnel and Facility)
+    return (
+      <div
+        id="umbrella-id-card"
+        ref={badgeRef}
+        className="relative w-[340px] h-[538px] rounded-[18px] bg-white text-[#111111] overflow-hidden border-0 ring-0 outline-none flex items-center justify-center select-none"
+      >
+        <UmbrellaOctagonLogo className="w-[190px] h-[190px]" variant="classic" />
+      </div>
+    );
+  }
   const divisionMeta =
     UMBRELLA_DIVISIONS.find((d) => d.value === data.division) ||
     UMBRELLA_DIVISIONS[0];

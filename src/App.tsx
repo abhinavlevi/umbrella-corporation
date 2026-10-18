@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  Loader2,
   RotateCcw,
   Share2,
   SlidersHorizontal,
@@ -27,7 +26,6 @@ import { BadgePreview } from './components/BadgePreview';
 import { UmbrellaOctagonLogo } from './components/UmbrellaGraphics';
 import { hiveAudio } from './utils/soundFx';
 import { syncBadgeSeo } from './utils/seoManager';
-import { hostImageForSharing } from './utils/imageHost';
 
 function safeDecodePayload<T>(encoded: string): T | null {
   try {
@@ -117,7 +115,7 @@ function parseBadgeFromUrl(): BadgeData {
   return badge;
 }
 
-function generateShareUrl(badgeData: BadgeData, publicPhotoUrl?: string): string {
+function generateShareUrl(badgeData: BadgeData): string {
   const origin = window.location.origin;
   const pathname = window.location.pathname;
   const basePreset =
@@ -130,7 +128,6 @@ function generateShareUrl(badgeData: BadgeData, publicPhotoUrl?: string): string
   if (badgeData.fullName !== basePreset.data.fullName) params.set('n', badgeData.fullName);
   if (badgeData.division !== basePreset.data.division) params.set('d', badgeData.division);
   if (badgeData.clearance !== basePreset.data.clearance) params.set('c', badgeData.clearance);
-  if (publicPhotoUrl) params.set('img', publicPhotoUrl);
   if (badgeData.height !== basePreset.data.height) params.set('h', badgeData.height);
   if (badgeData.weight !== basePreset.data.weight) params.set('w', badgeData.weight);
   if (badgeData.eyes !== basePreset.data.eyes) params.set('e', badgeData.eyes);
@@ -166,7 +163,7 @@ export function App() {
   const [badgeData, setBadgeData] = useState<BadgeData>(parseBadgeFromUrl);
 
   const [isExporting, setIsExporting] = useState<boolean>(false);
-  const [isSharing, setIsSharing] = useState<boolean>(false);
+  const [cardSide, setCardSide] = useState<'front' | 'back'>('front');
   const [statusBanner, setStatusBanner] = useState<string | null>(null);
   const [showBiometrics, setShowBiometrics] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -235,7 +232,7 @@ export function App() {
       photoOffsetX: 0,
       photoOffsetY: 0,
     });
-    showTemporaryStatus(`Loaded ${found.label} Record`);
+    showTemporaryStatus(`Loaded ${found.label}`);
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,7 +275,7 @@ export function App() {
       photoOffsetX: 0,
       photoOffsetY: 0,
     }));
-    showTemporaryStatus('Photo Reset to Default');
+    showTemporaryStatus('Photo reset');
   };
 
   const handleResetFraming = () => {
@@ -315,44 +312,27 @@ export function App() {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 
+      const sideSuffix = cardSide === 'front' ? 'front' : 'back';
       const link = document.createElement('a');
-      link.download = `umbrella-id-${sanitizedName || 'badge'}.png`;
+      link.download = `umbrella-id-${sanitizedName || 'badge'}-${sideSuffix}.png`;
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      showTemporaryStatus('Badge Download Complete');
+      showTemporaryStatus('Downloaded successfully');
     } catch {
-      showTemporaryStatus('Export Interrupted - Please Retry');
+      showTemporaryStatus('Download failed - please retry');
     } finally {
       setIsExporting(false);
     }
   };
 
   const handleShare = async () => {
-    if (isSharing) return;
-    setIsSharing(true);
     hiveAudio.playSelectChirp();
-    showTemporaryStatus('Securing Operative Record & Preparing Public Link...');
 
     try {
-      // Only host if user uploaded a custom image (not a default preset SVG)
-      let publicPhotoUrl: string | undefined = undefined;
-      const isCustomPhoto =
-        badgeData.style !== 'facility' &&
-        badgeData.photoUrl &&
-        !badgeData.photoUrl.startsWith('data:image/svg+xml') &&
-        badgeData.photoUrl !== OPERATIVE_PORTRAITS[badgeData.presetId];
-
-      if (isCustomPhoto) {
-        const hosted = await hostImageForSharing(badgeData.photoUrl);
-        if (hosted && hosted.startsWith('http')) {
-          publicPhotoUrl = hosted;
-        }
-      }
-
-      const shareUrl = generateShareUrl(badgeData, publicPhotoUrl);
+      const shareUrl = generateShareUrl(badgeData);
       window.history.replaceState({}, '', shareUrl);
 
       if (navigator.share) {
@@ -362,7 +342,7 @@ export function App() {
             text: `Umbrella Corporation Access Credential for ${badgeData.fullName} (${badgeData.clearance}).`,
             url: shareUrl,
           });
-          showTemporaryStatus('Credential Link Shared Successfully');
+          showTemporaryStatus('Link shared');
           return;
         } catch {
           // User canceled share sheet; fallback to clipboard
@@ -371,14 +351,12 @@ export function App() {
 
       try {
         await navigator.clipboard.writeText(shareUrl);
-        showTemporaryStatus('Credential Link Copied to Clipboard');
+        showTemporaryStatus('Link copied to clipboard');
       } catch {
-        showTemporaryStatus('Credential Link Updated in Browser');
+        showTemporaryStatus('Link updated');
       }
     } catch {
-      showTemporaryStatus('Sharing Interrupted - Please Retry');
-    } finally {
-      setIsSharing(false);
+      showTemporaryStatus('Share failed - please retry');
     }
   };
 
@@ -394,7 +372,7 @@ export function App() {
                 UMBRELLA CORPORATION
               </h1>
               <p className="text-xs text-zinc-400 tracking-wider">
-                The Hive Access Badge Creator
+                Access Badge Creator
               </p>
             </div>
           </div>
@@ -402,7 +380,7 @@ export function App() {
             <button
               type="button"
               onClick={toggleSound}
-              title={soundEnabled ? 'Mute Terminal Audio' : 'Enable Terminal Audio'}
+              title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-700/80 text-xs text-zinc-300 transition cursor-pointer"
               aria-pressed={soundEnabled}
             >
@@ -418,9 +396,6 @@ export function App() {
                 </>
               )}
             </button>
-            <span className="text-xs text-zinc-400 uppercase tracking-widest hidden md:inline">
-              Official Access System
-            </span>
           </div>
         </div>
       </header>
@@ -473,7 +448,7 @@ export function App() {
                   htmlFor="quick-fill-select"
                   className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5"
                 >
-                  Quick Fill Record
+                  Preset
                 </label>
                 <div className="relative">
                   <select
@@ -487,7 +462,7 @@ export function App() {
                     <option value="wesker">Albert Wesker (Directorate / Clearance A)</option>
                     <option value="hunk">HUNK (Alpha Team Leader)</option>
                     <option value="birkin">Dr. William Birkin (Virology Director)</option>
-                    <option value="custom">Custom Operative</option>
+                    <option value="custom">Custom</option>
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                 </div>
@@ -574,7 +549,7 @@ export function App() {
                 <div className="pt-2 border-t border-zinc-800/80 space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300">
-                      Operative Photo
+                      Photo
                     </label>
                     <button
                       type="button"
@@ -613,7 +588,7 @@ export function App() {
                     <button
                       type="button"
                       onClick={handleResetPhoto}
-                      title="Reset to default operative photo"
+                      title="Reset photo"
                       className="hive-input px-3 py-2 rounded-lg bg-[#0b0d10] hover:bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs font-medium cursor-pointer transition flex items-center gap-1.5"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
@@ -621,31 +596,31 @@ export function App() {
                     </button>
                   </div>
 
-                  {/* Terminal Privacy & Public Sharing Disclosure */}
+                  {/* Local Browser Privacy Notice */}
                   <div className="p-2.5 rounded-lg bg-[#0b0d10] border border-zinc-800 text-[11px] text-zinc-400 leading-relaxed">
                     <span className="font-semibold text-zinc-300 block mb-0.5">
-                      Terminal Privacy &amp; Sharing Notice:
+                      Privacy Notice:
                     </span>
-                    Uploaded photographs remain strictly local on your workstation for badge customization and high-resolution printing. Your image is never transmitted externally when designing or downloading badges. Only if you generate a public share link will an optimized version be securely hosted so recipients can view your credential.
+                    Every image is browser loaded (and we won't save any images anywhere).
                   </div>
 
                   {/* Image Zoom & Alignment Controls */}
                   {showFramingControls && (
                     <div className="p-3.5 bg-[#0b0d10] border border-zinc-800 rounded-xl space-y-3">
                       <div className="flex items-center justify-between text-[11px] text-zinc-400 font-medium">
-                        <span className="uppercase tracking-wider">Framing &amp; Alignment</span>
+                        <span className="uppercase tracking-wider">Crop &amp; Position</span>
                         <button
                           type="button"
                           onClick={handleResetFraming}
                           className="text-red-400 hover:text-red-300 cursor-pointer"
                         >
-                          Center Frame
+                          Reset Position
                         </button>
                       </div>
 
                       <div>
                         <div className="flex justify-between text-[11px] text-zinc-400 mb-1">
-                          <span>Magnification</span>
+                          <span>Zoom</span>
                           <span>{Math.round((badgeData.photoZoom || 1) * 100)}%</span>
                         </div>
                         <input
@@ -662,7 +637,7 @@ export function App() {
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <div className="flex justify-between text-[11px] text-zinc-400 mb-1">
-                            <span>Horizontal Shift</span>
+                            <span>Horizontal Position</span>
                             <span>{badgeData.photoOffsetX || 0}%</span>
                           </div>
                           <input
@@ -680,7 +655,7 @@ export function App() {
 
                         <div>
                           <div className="flex justify-between text-[11px] text-zinc-400 mb-1">
-                            <span>Vertical Shift</span>
+                            <span>Vertical Position</span>
                             <span>{badgeData.photoOffsetY || 0}%</span>
                           </div>
                           <input
@@ -711,7 +686,7 @@ export function App() {
                   }}
                   className="w-full flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-zinc-300 hover:text-white py-1 cursor-pointer transition"
                 >
-                  <span>Biometrics &amp; Details</span>
+                  <span>Additional Details</span>
                   {showBiometrics ? (
                     <ChevronUp className="w-4 h-4 text-zinc-400" />
                   ) : (
@@ -838,7 +813,7 @@ export function App() {
                           htmlFor="bio-access"
                           className="block text-[11px] text-zinc-400 uppercase mb-1"
                         >
-                          Access Sector
+                          Access Area
                         </label>
                         <input
                           id="bio-access"
@@ -887,7 +862,7 @@ export function App() {
                           htmlFor="bio-serial"
                           className="block text-[11px] text-zinc-400 uppercase mb-1"
                         >
-                          Serial Code
+                          Serial Number
                         </label>
                         <input
                           id="bio-serial"
@@ -906,7 +881,7 @@ export function App() {
                           htmlFor="bio-verification"
                           className="block text-[11px] text-zinc-400 uppercase mb-1"
                         >
-                          Optical Verification Payload
+                          QR Code Content
                         </label>
                         <input
                           id="bio-verification"
@@ -942,9 +917,48 @@ export function App() {
 
             {/* Neutral, well-lit matte dark stage (#16191f) */}
             <div className="w-full bg-[#16191f] border border-zinc-800 rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center min-h-[560px] overflow-x-auto shadow-inner">
+              {/* Front / Back Side Switcher */}
+              <div className="inline-flex p-1 mb-6 rounded-xl bg-[#0e1015] border border-zinc-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    hiveAudio.playSelectChirp();
+                    setCardSide('front');
+                  }}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    cardSide === 'front'
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Front
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    hiveAudio.playSelectChirp();
+                    setCardSide('back');
+                  }}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition cursor-pointer ${
+                    cardSide === 'back'
+                      ? 'bg-red-600 text-white shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  Back
+                </button>
+              </div>
+
               {/* Soft Drop Shadow Wrapper around the Badge (separated from inner export node) */}
-              <div className="shadow-[0_20px_50px_rgba(0,0,0,0.6)] rounded-[18px]">
-                <BadgePreview data={badgeData} />
+              <div
+                onClick={() => {
+                  hiveAudio.playSelectChirp();
+                  setCardSide((prev) => (prev === 'front' ? 'back' : 'front'));
+                }}
+                className="shadow-[0_20px_50px_rgba(0,0,0,0.6)] rounded-[18px] cursor-pointer"
+                title="Click to flip card"
+              >
+                <BadgePreview data={badgeData} side={cardSide} />
               </div>
             </div>
 
@@ -957,26 +971,28 @@ export function App() {
                 className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-red-600 hover:bg-red-500 disabled:bg-red-900/60 text-white font-semibold text-sm shadow-md shadow-red-950/40 transition cursor-pointer"
               >
                 <Download className="w-4 h-4" />
-                <span>{isExporting ? 'Generating Badge...' : 'Download ID Card'}</span>
+                <span>{isExporting ? 'Downloading...' : `Download ${cardSide === 'front' ? 'Front' : 'Back'}`}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  hiveAudio.playSelectChirp();
+                  setCardSide((prev) => (prev === 'front' ? 'back' : 'front'));
+                }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-transparent hover:bg-zinc-800/80 border border-zinc-700 text-zinc-200 font-medium text-sm transition cursor-pointer"
+              >
+                <RotateCcw className="w-4 h-4 text-zinc-400" />
+                <span>Flip Card</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleShare}
-                disabled={isSharing}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent hover:bg-zinc-800/80 border border-zinc-700 text-zinc-200 font-medium text-sm transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent hover:bg-zinc-800/80 border border-zinc-700 text-zinc-200 font-medium text-sm transition cursor-pointer"
               >
-                {isSharing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 text-red-500 animate-spin" />
-                    <span>Securing Link...</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 className="w-4 h-4 text-zinc-400" />
-                    <span>Share Credential</span>
-                  </>
-                )}
+                <Share2 className="w-4 h-4 text-zinc-400" />
+                <span>Share</span>
               </button>
             </div>
           </div>
